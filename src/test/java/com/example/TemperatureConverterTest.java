@@ -32,6 +32,6 @@ public class TemperatureConverterTest
     @Test
     public void TestKelvinToCelcius(){
         assertEquals(26.85,converter.kelvinToCelsius(300),0.01);
-        assertEquals(826.85,converter.kelvinToCelsius(1000),0.01);
+        assertEquals(726.85,converter.kelvinToCelsius(1000),0.01);
     }
 }
