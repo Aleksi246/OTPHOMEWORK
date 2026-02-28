@@ -58,19 +58,12 @@ pipeline {
         }
 
         stage('Push Docker Image to Docker Hub') {
-            when {
-                anyOf {
-                    branch 'main'
-                    branch 'master'
-                }
-            }
             steps {
                 script {
-                    // Use the same image built earlier
-                    docker.withRegistry('https://index.docker.io/v1/', env.DOCKERHUB_CREDENTIALS_ID) {
-                        def appImage = docker.image(env.DOCKER_IMAGE)
-                        appImage.push()          // push the tag with BUILD_NUMBER
-                        appImage.push('latest')  // push the latest tag
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
+                        def appImage = docker.image("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
+                        appImage.push()
+                        appImage.push('latest')
                     }
                 }
             }
