@@ -10,8 +10,12 @@
 <span class="fc" id="L10">        return (celsius * 9 / 5) + 32;</span>
     }
 
+    public double kelvinToCelsius(double kelvin){
+<span class="fc" id="L14">        return kelvin - 273.15;</span>
+    }
+
     public boolean isExtremeTemperature(double celsius) {
-<span class="fc bfc" id="L14" title="All 4 branches covered.">        return celsius &lt; -40 || celsius &gt; 50;</span>
+<span class="fc bfc" id="L18" title="All 4 branches covered.">        return celsius &lt; -40 || celsius &gt; 50;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
