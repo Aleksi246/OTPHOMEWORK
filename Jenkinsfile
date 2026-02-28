@@ -16,6 +16,10 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                // Print branch name for debugging
+                script {
+                    echo "Current branch: ${env.BRANCH_NAME}"
+                }
             }
         }
 
@@ -44,7 +48,10 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def appImage = docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
+                    // Use a variable to reference the image for reuse
+                    env.DOCKER_IMAGE = "${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}"
+                    def appImage = docker.build(env.DOCKER_IMAGE)
+                    // Also tag as latest
                     appImage.tag('latest')
                 }
             }
@@ -59,10 +66,11 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
-                        def appImage = docker.image("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
-                        appImage.push()
-                        appImage.push('latest')
+                    // Use the same image built earlier
+                    docker.withRegistry('https://index.docker.io/v1/', env.DOCKERHUB_CREDENTIALS_ID) {
+                        def appImage = docker.image(env.DOCKER_IMAGE)
+                        appImage.push()          // push the tag with BUILD_NUMBER
+                        appImage.push('latest')  // push the latest tag
                     }
                 }
             }
